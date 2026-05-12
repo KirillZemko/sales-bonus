@@ -15,9 +15,6 @@ function calculateSimpleRevenue(purchase, _product) {
  * @param seller карточка продавца
  * @returns {number}
  */
-function calculateBonusByProfit(index, total, seller) {
-    // @TODO: Расчет бонуса от позиции в рейтинге
-}
 
 /**
  * Функция для анализа данных продаж
@@ -25,20 +22,65 @@ function calculateBonusByProfit(index, total, seller) {
  * @param options
  * @returns {{revenue, top_products, bonus, name, sales_count, profit, seller_id}[]}
  */
+
+function calculateSimpleRevenue(purchase, _product) {
+    // purchase — это одна из записей в поле items из чека в data.purchase_records
+    // _product — это продукт из коллекции data.products
+
+   const { discount, sale_price, quantity } = purchase; // деструктуризация объекта, далее идентичная запись const discount = purchase.discount...
+   const discountPercent = 1 - discount / 100;
+
+   return sale_price * quantity * discountPercent;
+}
+
+function calculateBonusByProfit(index, total, seller) {
+    // @TODO: Расчет бонуса от позиции в рейтинге
+
+    const { profit } = seller; // идентичная запись: const profit = seller.profit; { деструктуризация объекта }
+
+    if (index === 0) {
+        return profit * 0.15;
+    } else if (index === 1 || index === 2) {
+        return profit * 0.10;
+    } else if (index === total - 1) {
+        return 0;
+    } else {
+        return profit * 0.05;
+    }
+}
+
 function analyzeSalesData(data, options) {
-    // @TODO: Проверка входных данных
+    if (
+        !data ||
+        !Array.isArray(data.sellers) ||
+        !Array.isArray(data.products) ||
+        !Array.isArray(data.purchase_records) ||
+        data.sellers.length === 0 ||
+        data.products.length === 0 ||
+        data.purchase_records.length === 0
+    ) {
+        throw new Error('Некорректные входные данные');
+    }
 
-    // @TODO: Проверка наличия опций
+const { calculateRevenue, calculateBonus } = options; // Сюда передадим функции для расчётов
 
-    // @TODO: Подготовка промежуточных данных для сбора статистики
+if (!calculateRevenue || !calculateBonus) {
+    throw new Error('Не переданы функции');
+}
 
-    // @TODO: Индексация продавцов и товаров для быстрого доступа
+// @TODO: Проверка входных данных
 
-    // @TODO: Расчет выручки и прибыли для каждого продавца
+// @TODO: Проверка наличия опций
 
-    // @TODO: Сортировка продавцов по прибыли
+// @TODO: Подготовка промежуточных данных для сбора статистики
 
-    // @TODO: Назначение премий на основе ранжирования
+// @TODO: Индексация продавцов и товаров для быстрого доступа
 
-    // @TODO: Подготовка итоговой коллекции с нужными полями
+// @TODO: Расчет выручки и прибыли для каждого продавца
+
+// @TODO: Сортировка продавцов по прибыли
+
+// @TODO: Назначение премий на основе ранжирования
+
+// @TODO: Подготовка итоговой коллекции с нужными полями
 }
