@@ -91,6 +91,8 @@ function analyzeSalesData(data, options) {
     // Расчет выручки и прибыли для каждого продавца
     data.purchase_records.forEach(receipt => {
         const seller = sellerIndex[receipt.seller_id];
+        seller.sales_count += 1;
+
         receipt.items.forEach(item => {
             const product = productIndex[item.sku];
 
@@ -100,7 +102,6 @@ function analyzeSalesData(data, options) {
 
             seller.revenue += revenue;
             seller.profit += profit;
-            seller.sales_count += item.quantity;
 
             if (!seller.products_sold[item.sku]) {
                 seller.products_sold[item.sku] = 0;
@@ -132,7 +133,9 @@ seller.products_sold[item.sku] += item.quantity;
         top_products: Object.entries(seller.products_sold)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 10)
-            .map(([sku]) => sku),
+            .map(([sku, quantity]) => ({
+                sku,
+                quantity})),
         bonus: +(seller.bonus.toFixed(2)),
     }));
 }
