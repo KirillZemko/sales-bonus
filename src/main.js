@@ -128,13 +128,13 @@ seller.products_sold[item.sku] += item.quantity;
     return sellerStats.map(seller => ({
         seller_id: seller.id,
         name: seller.name,
-        revenue: seller.revenue,
-        profit: seller.profit,
+        revenue: +(seller.revenue.toFixed(2)),
+        profit: +(seller.profit.toFixed(2)),
         sales_count: seller.sales_count,
         top_products: Object.entries(seller.products_sold)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 10)
             .map(([sku]) => sku),
-        bonus: seller.bonus,
+        bonus: +(seller.bonus.toFixed(2)),
     }));
 }
