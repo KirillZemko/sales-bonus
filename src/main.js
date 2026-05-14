@@ -89,7 +89,6 @@ function analyzeSalesData(data, options) {
     );
 
     // Расчет выручки и прибыли для каждого продавца
-
     data.purchase_records.forEach(receipt => {
         const seller = sellerIndex[receipt.seller_id];
         receipt.items.forEach(item => {
@@ -126,5 +125,9 @@ function analyzeSalesData(data, options) {
         profit: seller.profit,
         sales_count: seller.sales_count,
         bonus: seller.bonus,
+        top_products: Object.entries(seller.products_sold)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10)
+            .map(([sku]) => sku),
     }));
 }
