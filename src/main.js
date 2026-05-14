@@ -96,18 +96,20 @@ function analyzeSalesData(data, options) {
         receipt.items.forEach(item => {
             const product = productIndex[item.sku];
 
-            const revenue = Number(calculateRevenue(item, product).toFixed(2));
+            const rawRevenue = calculateRevenue(item, product); // для profit
+            const revenue = Number(rawRevenue.toFixed(2));      // для revenue
             const cost = product.purchase_price * item.quantity;
-            const profit = revenue - cost;
+            const profit = rawRevenue - cost;
 
             seller.revenue += revenue;
+
             seller.profit += profit;
 
             if (!seller.products_sold[item.sku]) {
                 seller.products_sold[item.sku] = 0;
             }
 
-seller.products_sold[item.sku] += item.quantity;
+            seller.products_sold[item.sku] += item.quantity;
         });
     })
 
@@ -115,6 +117,10 @@ seller.products_sold[item.sku] += item.quantity;
     sellerStats.sort((a, b) => b.profit - a.profit);    
 
     // Назначение премий на основе ранжирования 
+    sellerStats.forEach(seller => {
+        seller.profit = Number(seller.profit.toFixed(2));
+    });
+
     sellerStats.forEach((seller, index) => {
         seller.bonus = calculateBonus(
             index,
