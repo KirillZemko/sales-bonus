@@ -131,10 +131,10 @@ seller.products_sold[item.sku] += item.quantity;
         revenue: seller.revenue,
         profit: seller.profit,
         sales_count: seller.sales_count,
-        bonus: seller.bonus,
         top_products: Object.entries(seller.products_sold)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 10)
             .map(([sku]) => sku),
+        bonus: seller.bonus,
     }));
 }
