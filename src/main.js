@@ -100,6 +100,13 @@ function analyzeSalesData(data, options) {
 
             seller.revenue += revenue;
             seller.profit += profit;
+            seller.sales_count += item.quantity;
+
+            if (!seller.products_sold[item.sku]) {
+                seller.products_sold[item.sku] = 0;
+            }
+
+seller.products_sold[item.sku] += item.quantity;
         });
     })
 
