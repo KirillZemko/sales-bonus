@@ -96,7 +96,7 @@ function analyzeSalesData(data, options) {
         receipt.items.forEach(item => {
             const product = productIndex[item.sku];
 
-            const revenue = calculateRevenue(item, product).toFixed(2);
+            const revenue = Number(calculateRevenue(item, product).toFixed(2));
             const cost = product.purchase_price * item.quantity;
             const profit = revenue - cost;
 
